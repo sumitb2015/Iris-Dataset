@@ -14,23 +14,26 @@ from sklearn.svm import SVC
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
-
+from sklearn.preprocessing import StandardScaler
 
 # Load the dataset
 features,target = load_wine(return_X_y=True,as_frame=True)
 
-# Preprocess the data
-
 # Split the data into training and test sets
 X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.3, random_state=42)
+
+sc = StandardScaler()
+
+X_train_scaled = sc.fit_transform(X_train)
+X_test_scaled = sc.transform(X_test)
 
 # Create the model
 model = GradientBoostingClassifier()
 # Train the model using the training data
-model.fit(X_train, y_train)
+model.fit(X_train_scaled, y_train)
 
 # Make predictions on the test set
-y_pred = model.predict(X_test)
+y_pred = model.predict(X_test_scaled)
 
 # Evaluate the model
 accuracy = accuracy_score(y_test, y_pred)
