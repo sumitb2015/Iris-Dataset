@@ -17,8 +17,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 
 # Load the dataset
-features,target = load_wine(return_X_y=True,as_frame=True)
-target = pd.DataFrame({'target':target})
+features,output = load_wine(return_X_y=True,as_frame=True)
+target = pd.DataFrame({'target':output})
 
 #Exploratory Data Analysis
 print(features)
@@ -81,9 +81,15 @@ param_grid = {
 grid_search = GridSearchCV(estimator=model,param_grid=param_grid,n_jobs=-1,cv=5)
 
 # Fit the grid search model
-grid_search.fit(features, target)
+grid_search.fit(features, output.ravel())
 
 # Print the best parameters and best score
 print(f"Best estimator = {grid_search.best_estimator_}")
 print(f"Best Params = {grid_search.best_params_}" )
 print(f"Best Score = {grid_search.best_score_}")
+
+# Access the best estimator
+best_model = grid_search.best_estimator_
+predictions = best_model.predict(X_test)
+
+print(f'The accuracy score = {accuracy_score(y_test,predictions)}')
