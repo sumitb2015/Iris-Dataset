@@ -42,7 +42,7 @@ X_train_scaled = sc.fit_transform(X_train)
 X_test_scaled = sc.transform(X_test)
 
 # Create the model
-model = GradientBoostingClassifier()
+model = LogisticRegression()
 # Train the model using the training data
 model.fit(X_train_scaled, y_train)
 
@@ -68,3 +68,22 @@ plt.figure(figsize=(15,15))
 sns.heatmap(features.corr(),cmap="YlGnBu", annot=True)
 sns.despine()
 plt.show()
+
+#Hyperparameterization
+param_grid = {
+    'penalty': ['l1', 'l2'],
+    'C': [0.001, 0.01, 0.1, 1, 10, 100],
+    'fit_intercept': [True, False],
+    'solver': ['liblinear', 'saga'],
+    'max_iter': [100, 200, 500]
+}
+# Create GridSearchCV object
+grid_search = GridSearchCV(estimator=model,param_grid=param_grid,n_jobs=-1,cv=5)
+
+# Fit the grid search model
+grid_search.fit(features, target)
+
+# Print the best parameters and best score
+print(f"Best estimator = {grid_search.best_estimator_}")
+print(f"Best Params = {grid_search.best_params_}" )
+print(f"Best Score = {grid_search.best_score_}")
