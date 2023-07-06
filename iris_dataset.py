@@ -18,6 +18,20 @@ from sklearn.preprocessing import StandardScaler
 
 # Load the dataset
 features,target = load_wine(return_X_y=True,as_frame=True)
+target = pd.DataFrame({'target':target})
+
+#Exploratory Data Analysis
+print(features)
+print(target)
+print(features.info())
+print(target.info())
+print(f'The total missing values in the features = \n{features.isna().sum()}')
+
+#Plot the Countplot of the classes in the target variable
+ax = sns.countplot(x='target',order=target.target.value_counts(ascending=False).index ,data=target)
+abs_values = target.target.value_counts(ascending=False).values
+ax.bar_label(container=ax.containers[0],labels=abs_values)
+plt.show()
 
 # Split the data into training and test sets
 X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.3, random_state=42)
@@ -48,3 +62,9 @@ print(cm)
 cr = classification_report(y_test, y_pred)
 print('Classification Report:')
 print(cr)
+
+#Plot the heatmap
+plt.figure(figsize=(15,15))
+sns.heatmap(features.corr(),cmap="YlGnBu", annot=True)
+sns.despine()
+plt.show()
