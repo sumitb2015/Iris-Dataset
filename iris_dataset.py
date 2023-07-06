@@ -42,7 +42,7 @@ X_train_scaled = sc.fit_transform(X_train)
 X_test_scaled = sc.transform(X_test)
 
 # Create the model
-model = LogisticRegression()
+model = GradientBoostingClassifier()
 # Train the model using the training data
 model.fit(X_train_scaled, y_train)
 
